@@ -69,7 +69,7 @@ const App = () => {
           break;
       }
     }
-    acc = Math.round(acc);
+    acc = acc.toFixed(4)
     setResult(acc);
     setCurrentNumber(String(acc));
     setOperands([]);
