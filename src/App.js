@@ -7,7 +7,8 @@ import { useState } from "react";
 const App = () => {
   const [currentNumber, setCurrentNumber] = useState('0');
   const [firstNumber, setFirstNumber] = useState('0');
-  const [operation, setOperation] = useState('');
+  const [result, setResult] = useState('0');
+  const [operation, setOperation] = useState([]);
   const [operands, setOperands] = useState([])
 
   const handleAddNumber = (number) => {
@@ -20,62 +21,139 @@ const App = () => {
     setCurrentNumber('0');
     setFirstNumber('0');
     setOperation('');
+    setOperands('')
   };
 
-  const handleSumNumbers = (number) => {
-    setOperation('+');
-    if (firstNumber === '0') {
-      setFirstNumber(currentNumber);
-      handleCLear();
-    } else {
-      const sum = Number(firstNumber) + Number(currentNumber);
-      setCurrentNumber(String(sum));
+  const handleOperation = (number, operation) => {
+    const num = Number(number);
+    switch (operation) {
+      case '+':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber('0')
+        setOperation('+');
+        break;
+      case '-':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber('0');
+        setOperation('-');
+        break;
+      case '*':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber('0');
+        setOperation('*');
+        break;
+      case '/':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber('0');
+        setOperation('/');
+        break;
+      case '^':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber('0');
+        setOperation('^');
+        break;
+      case '√':
+        setOperands(prevOperands => {
+          if (prevOperands.length === 0) {
+            return [num];
+          }
+          return [...prevOperands, currentNumber];
+        });
+        setCurrentNumber(num);
+        setOperation('√');
+        break;
+      default:
+        break;
     }
-    console.log("First number: ", firstNumber);
-    console.log("Current NUmber: ", currentNumber);
-  };
-
-
-  const handleSumNumbers = (number) => {
-    setOperation('+');
-    if (firstNumber === '0') {
-      setFirstNumber(currentNumber);
-      handleCLear();
-    } else {
-      const sum = Number(firstNumber) + Number(currentNumber);
-      setCurrentNumber(String(sum));
-    }
-    console.log("First number: ", firstNumber);
-    console.log("Current NUmber: ", currentNumber);
-  };
-
-
+  }
 
   const handleEquals = () => {
-    if (firstNumber !== '0' && operation !== '' && currentNumber !== '0') {
-      switch (operation) {
-        case '+':
-          handleSumNumbers();
-          handleCLear();
-          break;
+    const newOprands = [...operands]
+    // if (top!=Number) {
 
+    // }
+    let top = newOprands.shift()
+    if (top == Number) {
+      setResult(top)
+    } else {
+
+    }
+    for (let index = 0; index < operands.length; index++) {
+      let sinal = newOprands.shift()
+      switch (sinal) {
+        case "+":
+
+          break;
+        case "+":
+
+          break;
+        case "-":
+
+          break;
+        case "*":
+
+          break;
+        case "/":
+
+          break;
+        case "^":
+
+          break;
+        case "√":
+
+          break;
         default:
           break;
       }
-
     }
   };
 
   return (
     <Container>
-      <Input value={currentNumber} />
+      <Input
+        value={
+          currentNumber === '0'
+            ? ''
+            : [...operands, currentNumber].join(' ')
+        }
+      />
       <Content>
 
         <Column>
           <Row>
             <Button label={"C"} onClick={() => handleCLear()} />
-            <Button label={"^"} onClick={() => handleAddNumber('1')} />
-            <Button label={"√"} onClick={() => handleAddNumber('1')} />
+            <Button label={"^"} onClick={() => handleOperation(currentNumber, "^")} />
+            <Button label={"√"} onClick={() => handleOperation(currentNumber, "√")} />
           </Row>
 
           <Row>
@@ -99,10 +177,10 @@ const App = () => {
           <Button label={0} onClick={() => handleAddNumber('0')} />
         </Column>
         <Column>
-          <Button label={"+"} onClick={handleSumNumbers} />
-          <Button label={"-"} />
-          <Button label={"x"} />
-          <Button label={":"} />
+          <Button label={"+"} onClick={() => handleOperation(currentNumber, '+')} />
+          <Button label={"-"} onClick={() => handleOperation(currentNumber, '-')} />
+          <Button label={"x"} onClick={() => handleOperation(currentNumber, '*')} />
+          <Button label={"/"} onClick={() => handleOperation(currentNumber, '/')} />
           <Button label={"="} />
         </Column>
 
