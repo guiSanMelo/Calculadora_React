@@ -20,132 +20,71 @@ const App = () => {
   const handleCLear = () => {
     setCurrentNumber('0');
     setFirstNumber('0');
-    setOperation('');
-    setOperands('')
+    setOperation([]);
+    setOperands([])
   };
 
-  const handleOperation = (number, operation) => {
+  const handleOperation = (number, op) => {
     const num = Number(number);
-    switch (operation) {
-      case '+':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
 
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber('0')
-        setOperation('+');
-        break;
-      case '-':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
-
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber('0');
-        setOperation('-');
-        break;
-      case '*':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
-
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber('0');
-        setOperation('*');
-        break;
-      case '/':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
-
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber('0');
-        setOperation('/');
-        break;
-      case '^':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
-
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber('0');
-        setOperation('^');
-        break;
-      case '√':
-        setOperands(prevOperands => {
-          if (prevOperands.length === 0) {
-            return [num];
-          }
-          return [...prevOperands, currentNumber];
-        });
-        setCurrentNumber(num);
-        setOperation('√');
-        break;
-      default:
-        break;
-    }
-  }
+    setOperands(prev => [...prev, num]);
+    setOperation(prev => [...prev, op]);
+    setCurrentNumber('0');
+  };
 
   const handleEquals = () => {
-    const newOprands = [...operands]
-    // if (top!=Number) {
+    const newOperands = [...operands, currentNumber]; 
+    const newOperation = [...operation];
 
-    // }
-    let top = newOprands.shift()
-    if (top == Number) {
-      setResult(top)
-    } else {
+    let acc = Number(newOperands.shift());
 
-    }
-    for (let index = 0; index < operands.length; index++) {
-      let sinal = newOprands.shift()
+    for (let i = 0; i < newOperation.length; i++) {
+      const sinal = newOperation[i];
+      const next = Number(newOperands[i]);
+
       switch (sinal) {
         case "+":
-
-          break;
-        case "+":
-
+          acc = acc + next;
           break;
         case "-":
-
+          acc = acc - next;
           break;
         case "*":
-
+          acc = acc * next;
           break;
         case "/":
-
+          if (next === 0) {
+            console.log(`Impossível dividir ${acc}/${next}`);
+            return;
+          }
+          acc = acc / next;
           break;
         case "^":
-
+          acc = acc ** next;
           break;
         case "√":
-
+          acc = acc ** (1 / next);
           break;
         default:
           break;
       }
     }
+    acc = Math.round(acc);
+    setResult(acc);
+    setCurrentNumber(String(acc));
+    setOperands([]);
+    setOperation([]);
   };
 
   return (
     <Container>
       <Input
-        value={
-          currentNumber === '0'
-            ? ''
-            : [...operands, currentNumber].join(' ')
-        }
+        // value={
+        //   currentNumber === '0'
+        //     ? ''
+        //     : [...operands, currentNumber].join(' ')
+        // }
+        value={currentNumber}
       />
       <Content>
 
@@ -181,7 +120,7 @@ const App = () => {
           <Button label={"-"} onClick={() => handleOperation(currentNumber, '-')} />
           <Button label={"x"} onClick={() => handleOperation(currentNumber, '*')} />
           <Button label={"/"} onClick={() => handleOperation(currentNumber, '/')} />
-          <Button label={"="} />
+          <Button label={"="} onClick={() => handleEquals()} />
         </Column>
 
 
